@@ -42,10 +42,10 @@ router.get('/', function (req, res, next) {
 });
 
 // GET de un solo peli mediante id
-router.get('/:nombre', function (req, res, next) {
+router.get('/:id', function (req, res, next) {
 
     sequelize.sync().then(() => {
-        Pelicula.findOne({ where: { nombre: req.params.nombre } })
+        Pelicula.findOne({ where: { id: req.params.id } })
     // .then(Alumne => Alumne.get({plain: true}))
         .then(Pelicula => res.json({
             ok: true,
