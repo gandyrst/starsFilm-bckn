@@ -1,32 +1,26 @@
 import express from 'express';
 import { DataTypes } from "sequelize";
-import sequelize from "../loadSequelize.js";
-//DEFINICION DEL MODELO
-const Pelicula = sequelize.define('Pelicula', {
-    tipo: DataTypes.STRING,
+import sequelize from "../../loadSequelize.js";
+//DEFINICION DEL MODELO: Se define la tabla y sus campos con el tipo de dato, tal cual la base de datos.
+const Serie = sequelize.define('Serie', {
     nombre: DataTypes.STRING,
     año_estreno: DataTypes.INTEGER,
     plataforma: DataTypes.STRING,
     idioma: DataTypes.STRING,
-    descripcion: DataTypes.STRING,
+    subtitulos: DataTypes.STRING,
     categoria: DataTypes.STRING,
     categoria2: DataTypes.STRING,
-    subtitulos: DataTypes.STRING
-    }, { tableName: 'peliculas', timestamps: false });
+    descripcion: DataTypes.STRING
+    }, { tableName: 'series', timestamps: false });
 
 const router = express.Router();
-// GET lista de todos los alumnes
-// vinculamos la ruta /api/alumnes a la función declarada
-// si todo ok devolveremos un objeto tipo:
-// {ok: true, data: [lista_de_objetos_alumne...]}
-// si se produce un error:
-// {ok: false, error: mensaje_de_error}
+
 router.get('/', function (req, res, next) {
     sequelize.sync().then(() => {
-        Pelicula.findAll()
-        .then(peliculas => res.json({
+        Serie.findAll()
+        .then(series => res.json({
             ok: true,
-            data: peliculas
+            data: series
         }))
 
         .catch(error => res.json({
@@ -42,15 +36,14 @@ router.get('/', function (req, res, next) {
     });
 });
 
-// GET de un solo alumne
-router.get('/:tipo', function (req, res, next) {
+router.get('/:nombre', function (req, res, next) {
 
     sequelize.sync().then(() => {
-        Pelicula.findOne({ where: { tipo: req.params.tipo } })
+        Serie.findOne({ where: { nombre: req.params.nombre } })
     // .then(Alumne => Alumne.get({plain: true}))
-        .then(Pelicula => res.json({
+        .then(Serie => res.json({
             ok: true,
-            data: Pelicula
+            data: Serie
         }))
         
     .catch(error => res.json({
@@ -66,11 +59,10 @@ router.get('/:tipo', function (req, res, next) {
     });
 });
 
-// POST, creació d'un nou alumne
 router.post('/', function (req, res, next) {
 
     sequelize.sync().then(() => {
-        Pelicula.create(req.body)
+        Serie.create(req.body)
 
         .then((item) => res.json({ ok: true, data: item }))
 
@@ -83,10 +75,9 @@ router.post('/', function (req, res, next) {
     });
 });
 
-// put Update de toda la vida
-router.put('/:id', function (req, res, next) {
+router.put('/:nombre', function (req, res, next) {
     sequelize.sync().then(() => {
-        Pelicula.findOne({ where: { id: req.params.id } })
+        Serie.findOne({ where: { nombre: req.params.nombre } })
         .then((al) =>
         al.update(req.body)
         )
@@ -110,14 +101,19 @@ router.put('/:id', function (req, res, next) {
         });
 });
 
-// DELETE elimina l'alumne id
-router.delete('/:id', function (req, res, next) {
+router.delete('/:nombre', function (req, res, next) {
     sequelize.sync().then(() => {
-        Pelicula.destroy({ where: { id: req.params.id } })
+        Serie.destroy({ where: { nombre: req.params.nombre } })
 
-        .then((data) => res.json({ ok: true, data }))
+        .then((data) => res.json({
+             ok: true,
+             data 
+            }))
 
-        .catch((error) => res.json({ ok: false, error }))})
+        .catch((error) => res.json({
+             ok: false,
+             error 
+            }))})
 
         .catch((error) => {
             res.json({
@@ -126,4 +122,5 @@ router.delete('/:id', function (req, res, next) {
             })
     });
 });
+
 export default router;
