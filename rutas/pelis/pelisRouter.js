@@ -4,13 +4,19 @@ import sequelize from "../../loadSequelize.js";
 //DEFINICION DEL MODELO: Se define la tabla y sus campos con el tipo de dato, tal cual la base de datos.
 const Pelicula = sequelize.define('Pelicula', {
     nombre: DataTypes.STRING,
+    director: DataTypes.STRING,
     año_estreno: DataTypes.INTEGER,
+    reparto: DataTypes.STRING,
     plataforma: DataTypes.STRING,
     idioma: DataTypes.STRING,
     subtitulos: DataTypes.STRING,
     categoria: DataTypes.STRING,
     categoria2: DataTypes.STRING,
-    descripcion: DataTypes.STRING
+    descripcion: DataTypes.STRING,
+    cartelera: DataTypes.BOOLEAN,
+    proximo_estreno: DataTypes.BOOLEAN,
+    documental: DataTypes.BOOLEAN,
+    foto: DataTypes.STRING,
     }, { tableName: 'peliculas', timestamps: false });
 
 const router = express.Router();
